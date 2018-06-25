@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.noname.bookstore.Domains;
+package com.noname.bookstore;
 
 /**
  *
  * @author YBolshakova
  */
-class Books {
+public class Table {
+    
+   
     
 }

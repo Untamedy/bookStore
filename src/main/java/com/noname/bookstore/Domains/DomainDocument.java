@@ -14,7 +14,7 @@ import java.util.List;
  public class DomainDocument {    
      
      int id;
-     List<Books> bookList;    
+     List<AppBooksStore> bookList;    
     public int getId() {
         return id;
     }
@@ -23,11 +23,11 @@ import java.util.List;
         this.id = id;
     }
 
-    public List<Books> getBookList() {
+    public List<AppBooksStore> getBookList() {
         return bookList;
     }
 
-    public void setBookList(List<Books> bookList) {
+    public void setBookList(List<AppBooksStore> bookList) {
         this.bookList = bookList;
     }
      
