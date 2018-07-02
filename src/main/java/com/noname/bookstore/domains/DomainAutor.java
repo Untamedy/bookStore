@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.noname.bookstore.Domains;
+package com.noname.bookstore.domains;
 
 /**
  *
  * @author YBolshakova
  */
-public class DomeinAutor {
+public class DomainAutor {
     int id;
     String name;
     String lastName;
-    int rating;
+  
     
-    public DomeinAutor(){    
+    public DomainAutor(){    
 }
 
     public int getId() {
@@ -30,15 +30,17 @@ public class DomeinAutor {
         return lastName;
     }
 
-    public int getRating() {
-        return rating;
-    }
-    public DomeinAutor(String name, String lastName, int rating){
+    
+    public DomainAutor(String name, String lastName){
         this();      
         this.name=name;
-        this.lastName=lastName;
-        this.rating=rating;     
+        this.lastName=lastName;           
             }
+    
+    public String getFullName(){
+        String fullName = name + " " + lastName;
+        return fullName;
+    }
     
     
 }

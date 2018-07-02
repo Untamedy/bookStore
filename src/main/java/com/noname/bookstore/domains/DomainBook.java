@@ -3,33 +3,37 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.noname.bookstore.Domains;
+package com.noname.bookstore.domains;
+
+import java.util.List;
 
 /**
  *
  * @author YBolshakova
  */
-public class DomainBook {
-
+public class DomainBook {    
+   
     int id;
-    String name;
+    String name;  
     String autor;
     String genre;
     double price;
     boolean inStoke;
     int quantity;
+    
+    List<String> autors;
 
     public DomainBook() {
 
     }
 
-    public DomainBook(String name, String autor, String genre, double price, boolean inStoke, int quaytity) {
+    public DomainBook(String name, List<String> autors, String genre, double price, boolean inStoke, int quatity) {        
         this();
-        this.autor = autor;
+        this.autors = autors;
         this.genre = genre;
         this.price = price;
         this.inStoke = inStoke;
-        this.quantity = quaytity;
+        this.quantity = quatity;
     }
     
 
@@ -49,13 +53,9 @@ public class DomainBook {
         this.name = name;
     }
 
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
+    public List<String> getAutor() {
+        return autors;
+    }  
 
     public String getGenre() {
         return genre;

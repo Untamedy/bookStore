@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.noname.bookstore.Domains;
+package com.noname.bookstore.domains;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  public class DomainDocument {    
      
      int id;
-     List<AppBooksStore> bookList;    
+     List<DomainBook> bookList;    
     public int getId() {
         return id;
     }
@@ -23,11 +23,11 @@ import java.util.List;
         this.id = id;
     }
 
-    public List<AppBooksStore> getBookList() {
+    public List<DomainBook> getBookList() {
         return bookList;
     }
 
-    public void setBookList(List<AppBooksStore> bookList) {
+    public void setBookList(List<DomainBook> bookList) {
         this.bookList = bookList;
     }
      
