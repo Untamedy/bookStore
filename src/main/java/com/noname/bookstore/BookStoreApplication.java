@@ -6,12 +6,13 @@
 package com.noname.bookstore;
 
 
-import com.noname.bookstore.domains.DomainAutor;
-import com.noname.bookstore.domains.DomainBook;
+
 import com.noname.bookstore.properties.ApplicationProperties;
+import com.noname.bookstore.services.DocumentReader;
+import com.noname.bookstore.services.DocumentWriter;
 import com.noname.bookstore.services.ServiceConnection;
 import java.io.IOException;
-import java.sql.Connection;
+import java.io.Writer;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
@@ -37,10 +38,17 @@ public class BookStoreApplication {
             logger.severe(e.getMessage());
             
         }
+        String path ="D:/tmp/inputListOfBooks.txt";
         
-        DomainAutor autor = new DomainAutor("Viktor ", "Pavlov");
-        DomainBook book = new DomainBook("Fairy tales", autor.getFullName(), "fairy tale", 25, true, 1);
-        System.out.println(book.getAutor());
+        DocumentReader read = new DocumentReader();
+        read.readFile(path);
+         DocumentWriter writeCheck = new DocumentWriter();
+         writeCheck.write();      
+        
+        }
+        
+       
+    
         
         
         /*
@@ -56,4 +64,4 @@ public class BookStoreApplication {
         */
         
     }
-}
+

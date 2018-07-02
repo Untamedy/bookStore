@@ -9,6 +9,8 @@ import com.noname.bookstore.domains.DomainBook;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,13 +19,17 @@ import java.util.List;
  */
 public class DocumentWriter {
     List<DomainBook> saleBookList;
-    String fileName;
+    String fileName = "Thank you for your purchase!";
+    Date date = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
+    
     
     public void write() throws IOException{
-    File check = new File("D:/tmp/check.txt");
-    FileWriter writer = new FileWriter(check);
-    writer.write(fileName);
-    
+    File check = new File("D:/tmp/cheks/check_" + dateFormat.format(date) + ".txt");
+    FileWriter writer = new FileWriter(check, true);    
+    writer.write(fileName + "****" + date);    
+    writer.flush();
+    writer.close();
     }
     
 }

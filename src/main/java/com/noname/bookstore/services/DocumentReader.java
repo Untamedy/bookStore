@@ -24,18 +24,19 @@ public class DocumentReader {
     public static final Logger LOGGER = Logger.getLogger(DocumentReader.class.getName());
 
     List<DomainBook> bookList = new ArrayList<>();
-    List<String> autors = new ArrayList<>();
+    List<String> autors;
 
     public List<DomainBook> readFile(String file) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String tmp = reader.readLine();
             while (tmp != null) {
-                String[] data = tmp.split(" ");
+                String[] data = tmp.split(",");                
 
-                for (int i = 0; i < data.length; i++) {
-                    String[] autor = data[1].split(",");
-                    for (int j = 0; j < autor.length; j++) {
+                for (int i = 0; i < data.length;i+=6) {
+                    autors = new ArrayList<>();
+                    String[] autor = data[1].split("/");                    
+                    for (int j = 0; j < autor.length; j++) {                        
                         autors.add(autor[j]);
                     }
                     double price = Double.valueOf(data[3]);
