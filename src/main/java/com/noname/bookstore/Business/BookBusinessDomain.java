@@ -16,7 +16,7 @@ public class BookBusinessDomain extends DomainBook{
    List<AutorBussinesDomain> autor;
     
     public BookBusinessDomain(DomainBook book){
-       super(book.getName(),book.getAutor(), book.getGenre(),book.getPrice(), book.isInStoke(), book.getQuantity());
+       super(book.getName(),book.getAutor(), book.getGenre(),book.getPrice(), book.getisInStoke(), book.getQuantity(), book.getArticul());
                 
     }
 

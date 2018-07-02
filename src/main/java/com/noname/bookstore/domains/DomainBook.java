@@ -20,6 +20,7 @@ public class DomainBook {
     double price;
     boolean inStoke;
     int quantity;
+    int articul;
     
     List<String> autors;
 
@@ -27,13 +28,22 @@ public class DomainBook {
 
     }
 
-    public DomainBook(String name, List<String> autors, String genre, double price, boolean inStoke, int quatity) {        
+    public DomainBook(String name, List<String> autors, String genre, double price, boolean inStoke, int quatity, int articul) {        
         this();
         this.autors = autors;
         this.genre = genre;
         this.price = price;
         this.inStoke = inStoke;
         this.quantity = quatity;
+        this.articul = articul;
+    }
+
+    public int getArticul() {
+        return articul;
+    }
+
+    public void setArticul(int articul) {
+        this.articul = articul;
     }
     
 
@@ -73,7 +83,7 @@ public class DomainBook {
         this.price = price;
     }
 
-    public boolean isInStoke() {
+    public boolean getisInStoke() {
         return inStoke;
     }
 
