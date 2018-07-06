@@ -11,31 +11,53 @@ import java.util.List;
  *
  * @author YBolshakova
  */
-public class DomainBook {    
-   
+public class DomainBook {
+
     int id;
-    String name;  
-    String autor;
+    String name;
+    List<DomainAutor> autor;
     String genre;
     double price;
-    boolean inStoke;
     int quantity;
     int articul;
     
-    List<String> autors;
 
     public DomainBook() {
 
     }
 
-    public DomainBook(String name, List<String> autors, String genre, double price, boolean inStoke, int quatity, int articul) {        
-        this();
-        this.autors = autors;
+    public DomainBook(int id, String name, List<DomainAutor> autors, String genre, double price, int quatity, int articul) {
+        this.id = id;
+        this.autor = autors;
+        this.name = name;
         this.genre = genre;
         this.price = price;
-        this.inStoke = inStoke;
         this.quantity = quatity;
         this.articul = articul;
+    }
+
+    public DomainBook(String name, List<DomainAutor> autors, String genre, double price, int quatity, int articul) {
+        this();
+        this.autor = autors;
+        this.name = name;
+        this.genre = genre;
+        this.price = price;
+        this.quantity = quatity;
+        this.articul = articul;
+    }
+
+    public DomainBook(int id, String name, String genre, double price, int quatity, int articul) {
+        this();
+        this.id = id;
+        this.name = name;
+        this.genre = genre;
+        this.price = price;
+        this.quantity = quatity;
+        this.articul = articul;
+    }
+
+    public List<DomainAutor> getAutors() {
+        return autor;
     }
 
     public int getArticul() {
@@ -45,7 +67,6 @@ public class DomainBook {
     public void setArticul(int articul) {
         this.articul = articul;
     }
-    
 
     public int getId() {
         return id;
@@ -62,11 +83,7 @@ public class DomainBook {
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<String> getAutor() {
-        return autors;
-    }  
-
+   
     public String getGenre() {
         return genre;
     }
@@ -81,14 +98,6 @@ public class DomainBook {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public boolean getisInStoke() {
-        return inStoke;
-    }
-
-    public void setInStoke(boolean inStoke) {
-        this.inStoke = inStoke;
     }
 
     public int getQuantity() {

@@ -5,7 +5,9 @@
  */
 package com.noname.bookstore.services;
 
+import com.noname.bookstore.domains.DomainAutor;
 import com.noname.bookstore.domains.DomainBook;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -24,27 +26,25 @@ public class DocumentReader {
     public static final Logger LOGGER = Logger.getLogger(DocumentReader.class.getName());
 
     List<DomainBook> bookList = new ArrayList<>();
-    List<String> autors;
+    List<DomainAutor> autors;
 
     public List<DomainBook> readFile(String file) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String tmp = reader.readLine();
             while (tmp != null) {
-                String[] data = tmp.split(",");                
-
-                for (int i = 0; i < data.length;i+=7) {
+                String[] data = tmp.split(",");  
+                
                     autors = new ArrayList<>();
-                    String[] autor = data[1].split("/");                    
-                    for (int j = 0; j < autor.length; j++) {                        
-                        autors.add(autor[j]);
+                    String[] autorArray = data[1].split("/");                    
+                    for (int j = 0; j < autorArray.length; j++) { 
+                        autors.add(createDomain(data));
                     }
-                    double price = Double.valueOf(data[3]);
-                    boolean inStoke = Boolean.valueOf(data[4]);
-                    int quantity = Integer.valueOf(data[5]);
-                    int articul = Integer.valueOf(data[6]);
-                    bookList.add(new DomainBook(data[0], autors, data[2], price, inStoke, quantity, articul));
-                }
+                    double price = Double.valueOf(data[3]);                   
+                    int quantity = Integer.valueOf(data[4]);
+                    int articul = Integer.valueOf(data[5]);
+                    bookList.add(new DomainBook(data[0],autors,data[2],price,quantity,articul));
+                
                 tmp = reader.readLine();
             }
         } catch (FileNotFoundException ex) {
@@ -54,4 +54,17 @@ public class DocumentReader {
         }
         return bookList;
     }
+       
+    
+    
+     public DomainAutor createDomain(String [] autors){
+         DomainAutor autor = null;
+         for(String s:autors){
+             String[]a = s.split(" ");
+              autor = new DomainAutor(a[0], a[1]);             
+         }
+        return autor;
+         
+     }
+     
 }

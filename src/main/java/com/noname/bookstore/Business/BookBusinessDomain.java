@@ -15,10 +15,10 @@ import java.util.List;
 public class BookBusinessDomain extends DomainBook{
    List<AutorBussinesDomain> autor;
     
-    public BookBusinessDomain(DomainBook book){
-       super(book.getName(),book.getAutor(), book.getGenre(),book.getPrice(), book.getisInStoke(), book.getQuantity(), book.getArticul());
-                
-    }
+    //public BookBusinessDomain(DomainBook book){
+     //  super(book.getName(),book.getAutors(), book.getGenre(),book.getPrice(), book.getQuantity(), book.getArticul());
+              
+   // }
 
     
 
