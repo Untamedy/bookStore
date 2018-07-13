@@ -60,6 +60,10 @@ public class DomainBook {
         return autor;
     }
 
+    public void setAutor(List<DomainAutor> autor) {
+        this.autor = autor;
+    }
+
     public int getArticul() {
         return articul;
     }

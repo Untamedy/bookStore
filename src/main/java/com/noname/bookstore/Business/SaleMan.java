@@ -23,14 +23,24 @@ public class SaleMan {
 
     SaleService saleService;
     BookService bookService;
-    AutorService autorService;
+    AutorService autorService;  
+    
+    
+    public SaleMan(SaleService saleService, BookService bookService, AutorService autorService) {
+        this.saleService = saleService;
+        this.bookService = bookService;
+        this.autorService = autorService;
+    }
 
     public void addBooks(String path) throws SQLException {
         DocumentReader reader = new DocumentReader();
         List<DomainBook> booksForAdd = reader.readFile(path);
-        bookService.addToBooks(booksForAdd);
-        autorService.addToAutor(booksForAdd);
+        booksForAdd = bookService.addBooks(booksForAdd);
+        booksForAdd = autorService.addAutors(booksForAdd);        
+        autorService.insertToAutor_of_books(booksForAdd);
     }
+
+  
 
     public DomainBook selectbooksByArticul(int articul) throws SQLException {
         return bookService.selectByArticul(articul);
@@ -41,15 +51,15 @@ public class SaleMan {
     }
 
     public List<DomainBook> selectBookByAutor(String lastname) throws SQLException {
-        return bookService.selectFromAurot(lastname);
+        return bookService.selectFromAutor(lastname);
     }
 
     public List<DomainBook> selectBooksByName(String name) throws SQLException {
         return bookService.selectByName(name);
     }
 
-    public void saleBooks(List<DomainBook> books) throws SQLException, IOException {
-        saleService.sale(books);
+    public void saleBooks() throws SQLException, IOException {
+        saleService.sale();
     }
 
 }

@@ -5,15 +5,21 @@
  */
 package com.noname.bookstore;
 
-
-
+import com.noname.bookstore.Business.SaleMan;
+import com.noname.bookstore.domains.DomainBook;
 import com.noname.bookstore.properties.ApplicationProperties;
+import com.noname.bookstore.services.AutorService;
+import com.noname.bookstore.services.BookService;
 import com.noname.bookstore.services.DocumentReader;
 import com.noname.bookstore.services.DocumentWriter;
+import com.noname.bookstore.services.GeneratorsService;
+import com.noname.bookstore.services.SaleService;
 import com.noname.bookstore.services.ServiceConnection;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -21,37 +27,43 @@ import java.util.logging.Logger;
  * @author YBolshakova
  */
 public class BookStoreApplication {
+
     public static void main(String[] args) throws IOException, SQLException {
         Logger logger = Logger.getLogger(BookStoreApplication.class.getName());
         ServiceConnection connect = new ServiceConnection();
-        
+        List<DomainBook> saleBookList = new ArrayList<>();
+        GeneratorsService generatorsService = new GeneratorsService(connect);
+        BookService bookService = new BookService(generatorsService, connect);
+        AutorService autorService = new AutorService(generatorsService, connect);
+        SaleService saleService = new SaleService();
+
         System.out.println("Start creating dataBase connect");
-        try{
-        ApplicationProperties prop = new ApplicationProperties();       
-        prop.readProperties();
-        connect.setProperties(prop);
-        connect.getConnect();
-        System.out.println("Connect successful");
-        }
-        catch(IOException e){
+        try {
+            ApplicationProperties prop = new ApplicationProperties();
+            prop.readProperties();
+            connect.setProperties(prop);
+            connect.getConnect();
+            System.out.println("Connect successful");
+        } catch (IOException e) {
             System.out.println("Connection wasn't creating ");
             logger.severe(e.getMessage());
-            
+
         }
-        String path ="D:/tmp/inputListOfBooks.txt";
-        
-        DocumentReader read = new DocumentReader();
-        read.readFile(path);
-         DocumentWriter writeCheck = new DocumentWriter();
-         writeCheck.write();      
-        
+        String path = "D:/tmp/inputListOfBooks.txt";
+
+        System.out.println("Start insert books");
+        SaleMan man = new SaleMan(saleService, bookService, autorService);
+        man.addBooks(path);
+        System.out.println("Books insert successful");
+        List<DomainBook> booklistFromautor = man.selectBookByAutor("V.K. Petrov");
+        for (DomainBook b : booklistFromautor) {
+            System.out.println(b.getName() + "\n");
         }
-        
-       
-    
-        
-        
-        /*
+
+    }
+}
+
+/*
         String sqlCreatingTable = "create table \"booklist\".test (id int, autor_id int, book_id int, foreign key (autor_id) references \"booklist\".autor (id), foreign key (book_id) references \"booklist\".books (id))";
         Table t = new Table(connect);
         try{
@@ -61,7 +73,4 @@ public class BookStoreApplication {
         catch(SQLException e){
             logger.severe("Table wasn't created" + e.getMessage());
         }
-        */
-        
-    }
-
+ */

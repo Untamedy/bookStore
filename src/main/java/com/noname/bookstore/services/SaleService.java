@@ -22,15 +22,17 @@ import java.util.List;
 public class SaleService {
     
     DocumentWriter writeCheck = new DocumentWriter();
-
     ServiceConnection connection = new ServiceConnection();
     Connection connect = connection.getConnect();
+    String path = "D:/tmp/inputListOfBooks.txt";
 
     String updateAfterSaleSQL = "Update \"booklist\".books SET quantity = quantity -? where articul = ?";
 
     List<DomainBook> saleList = new ArrayList<>();
 
-    public void sale(List<DomainBook> saleList) throws SQLException, IOException {
+    public void sale() throws SQLException, IOException {
+        List<DomainBook> saleList = getListForSale();
+        connect=connection.getConnect();
         PreparedStatement saleStatement = connect.prepareStatement(updateAfterSaleSQL);
         for(DomainBook db:saleList){
             int articul = db.getArticul();
@@ -43,8 +45,17 @@ public class SaleService {
         writeCheck.writeChecks(saleList);
 
     }
+    
+    public List<DomainBook> getListForSale(){
+        DocumentReader reader = new DocumentReader();
+        List<DomainBook> saleList = new ArrayList<>();
+        saleList = reader.readFile(path);
+        
+        return saleList;        
+    }
 
     public ResultSet getResult(String path, Object object) throws SQLException {
+        connect = connection.getConnect();
         PreparedStatement getResultStatement = connect.prepareStatement(path);
 
         if (object instanceof String) {

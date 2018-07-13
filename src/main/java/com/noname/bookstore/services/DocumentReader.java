@@ -33,18 +33,18 @@ public class DocumentReader {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String tmp = reader.readLine();
             while (tmp != null) {
-                String[] data = tmp.split(",");  
-                
-                    autors = new ArrayList<>();
-                    String[] autorArray = data[1].split("/");                    
-                    for (int j = 0; j < autorArray.length; j++) { 
-                        autors.add(createDomain(data));
-                    }
-                    double price = Double.valueOf(data[3]);                   
-                    int quantity = Integer.valueOf(data[4]);
-                    int articul = Integer.valueOf(data[5]);
-                    bookList.add(new DomainBook(data[0],autors,data[2],price,quantity,articul));
-                
+                String[] data = tmp.split(";");
+
+                autors = new ArrayList<>();
+                String[] autorArray = data[1].split("/");
+                for (int j = 0; j < autorArray.length; j++) {
+                    autors.add(createDomain(autorArray[j]));
+                }
+                double price = Double.valueOf(data[3]);
+                int quantity = Integer.valueOf(data[4]);
+                int articul = Integer.valueOf(data[5]);
+                bookList.add(new DomainBook(data[0], autors, data[2], price, quantity, articul));
+
                 tmp = reader.readLine();
             }
         } catch (FileNotFoundException ex) {
@@ -54,17 +54,14 @@ public class DocumentReader {
         }
         return bookList;
     }
-       
-    
-    
-     public DomainAutor createDomain(String [] autors){
-         DomainAutor autor = null;
-         for(String s:autors){
-             String[]a = s.split(" ");
-              autor = new DomainAutor(a[0], a[1]);             
-         }
+
+    public DomainAutor createDomain(String autors) {
+        String[] a = autors.split(" ");
+        DomainAutor autor = new DomainAutor();
+        autor.setLastName(a[0]);
+        autor.setName(a[1]);
         return autor;
-         
-     }
-     
+
+    }
+
 }

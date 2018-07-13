@@ -13,6 +13,18 @@ public class DomainAutor {
     int id;
     String name;
     String lastName;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
   
     
     public DomainAutor(){    
@@ -31,8 +43,14 @@ public class DomainAutor {
     }
 
     
+    public DomainAutor(int id,String name, String lastName){
+        this();   
+        this.id=id;
+        this.name=name;
+        this.lastName=lastName;           
+            }
     public DomainAutor(String name, String lastName){
-        this();      
+        this(); 
         this.name=name;
         this.lastName=lastName;           
             }

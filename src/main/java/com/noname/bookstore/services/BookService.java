@@ -5,6 +5,7 @@
  */
 package com.noname.bookstore.services;
 
+import com.noname.bookstore.domains.DomainAutor;
 import com.noname.bookstore.domains.DomainBook;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,49 +20,78 @@ import java.util.List;
  */
 public class BookService {
 
-    ServiceConnection connection = new ServiceConnection();
-    Connection connect = connection.getConnect();
+    AutorService autor;
 
-    String addBooksSQL = "INCERT INTO \"booklist\".books (name, genre, price,instoke,quantity,articul values(?,?,?,?,?)";
-    String selectBooksSQL = "SELECT id,name, genre, price,instoke,quantity FROM \"booklist\".books where \"articul\" = ?";
-    String selectByName = "SELECT id,name, genre, price,quantity,articul FROM \"booklist\".books where \"name\" = ?";
-    String selectByInStore = "Select * from \"booklist\".books where quantity>0";
-    String selectBookFromAutorSQL = "SELECT b.name as bookname a.name as autorname"
-            + " FROM \"booklist\".autor_Of_books as ab"
-            + "inner join \"booklist\".book as b on b.id = ab.book_id "
-            + "inner join \"booklist\".autor as a on a.id = ab.autor_id"
-            + "where a.id = ?"
-            + "order by ab.autor_id";
-    String updateBooksSQL = "Update \"booklist\".books SET quantity = quantity +?, instore = true where id = ?";
-    
-    
-     public void addToBooks(List<DomainBook> books) throws SQLException {
-         
-        PreparedStatement addBooksStatment = connect.prepareStatement(addBooksSQL);
-        for(DomainBook book:books){
-        addBooksStatment.setString(1, book.getName());
-        addBooksStatment.setString(2, book.getGenre());
-        addBooksStatment.setDouble(3, book.getPrice());
-        addBooksStatment.setInt(4, book.getQuantity());
-        addBooksStatment.setInt(5, book.getArticul());
-        addBooksStatment.execute();
-        }
+    private GeneratorsService generatorsService;
+    private ServiceConnection connection;
+    private Connection connect;
+
+    public final String addBooksSQL = "INSERT INTO \"booklist\".books (id,name, genre, price,quantity,articul) values(?,?,?,?,?,?)";
+
+    public final String selectBooksSQL = "SELECT id,name, genre, price,quantity,articul FROM \"booklist\".books where \"articul\" = ?";
+    public final String selectByName = "SELECT id,name, genre, price,quantity,articul FROM \"booklist\".books where \"name\" = ?";
+    public final String selectByInStore = "Select * from \"booklist\".books where quantity>0";
+    public final String selectBookFromAutorSQL = "select b.* from \"booklist\".books b, \"booklist\".autor a, \"booklist\".autor_of_books ab "
+            + "where a.\"name\" =? "
+            + "and a.id = ab.autor_id "
+            + "and b.id = ab.book_id";
+    public final String updateBooksSQL = "Update \"booklist\".books SET quantity = quantity +? where id = ?";
+
+    public BookService(GeneratorsService generatorsService, ServiceConnection connection) {
+        this.generatorsService = generatorsService;
+        this.connection = connection;
+        connect = connection.getConnect();
     }
-     
-     public List<DomainBook> selectFromAurot(String autorLastname) throws SQLException{
-         ResultSet result = getResult(selectBookFromAutorSQL, autorLastname);
-         List<DomainBook> bookFromAutor = new ArrayList<>();
-         boolean hasNext = result.next();
-         if(hasNext){
-             bookFromAutor.add(getDomainBook(result));
-                      }
-         
-         return bookFromAutor;        
-         
-     }
-     
-     
-     public DomainBook selectByArticul(int articul) throws SQLException {
+
+    public int getID() throws SQLException {
+        return generatorsService.getGeneratorID("book");
+    }
+    
+   
+
+    public List<DomainBook> addBooks(List<DomainBook> book) throws SQLException {
+        Connection connect = connection.getConnect();
+        List<DomainBook> result = new ArrayList<>(book.size());
+        for (DomainBook b : book) {            
+            if (null != selectByArticul(b.getArticul())) {
+                update(b, connect);
+                b.setId(selectByArticul(b.getArticul()).getId());
+                result.add(b);
+            } else {
+                b.setId(getID());
+                insertBook(b, connect);
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    public void insertBook(DomainBook book, Connection connect) throws SQLException {
+        PreparedStatement addBooksStatment = connect.prepareStatement(addBooksSQL);
+        addBooksStatment.setInt(1, getID());
+        addBooksStatment.setString(2, book.getName());
+        addBooksStatment.setString(3, book.getGenre());
+        addBooksStatment.setDouble(4, book.getPrice());
+        addBooksStatment.setInt(5, book.getQuantity());
+        addBooksStatment.setInt(6, book.getArticul());
+        addBooksStatment.execute();
+        generatorsService.updateGeneratorID("book");
+
+    }
+
+    public List<DomainBook> selectFromAutor(String autorLastname) throws SQLException {
+        ResultSet result = getResult(selectBookFromAutorSQL, autorLastname);
+        List<DomainBook> bookFromAutor = new ArrayList<>();
+        boolean hasNext = result.next();
+        if (hasNext) {
+            bookFromAutor.add(getDomainBook(result));
+        }
+
+        return bookFromAutor;
+
+    }
+
+    public DomainBook selectByArticul(int articul) throws SQLException {
         ResultSet result = getResult(selectBooksSQL, articul);
         boolean hasNext = result.next();
         if (hasNext) {
@@ -70,50 +100,50 @@ public class BookService {
         return null;
 
     }
-     
-     public List<DomainBook> selectByName(String bookName) throws SQLException {
-        ResultSet result = getResult(selectByName,bookName);        
+
+    public List<DomainBook> selectByName(String bookName) throws SQLException {
+        ResultSet result = getResult(selectByName, bookName);
         List<DomainBook> bookNameList = new ArrayList<>();
         boolean hasNext = result.next();
-        if(hasNext){
-            bookNameList.add(getDomainBook(result));            
+        if (hasNext) {
+            bookNameList.add(getDomainBook(result));
         }
         return bookNameList;
 
     }
-     
-     public List<DomainBook> selectByInStore() throws SQLException {
-         PreparedStatement selectByInStoreStatement =  connect.prepareStatement(selectByInStore);
-         List<DomainBook> inStoreList = new ArrayList<>();
-         ResultSet result = selectByInStoreStatement.executeQuery();
-         boolean hasNext = result.next();
-         if(hasNext){
-             inStoreList.add(getDomainBook(result));
-         }
-         
+
+    public List<DomainBook> selectByInStore() throws SQLException {
+        PreparedStatement selectByInStoreStatement = connect.prepareStatement(selectByInStore);
+        List<DomainBook> inStoreList = new ArrayList<>();
+        ResultSet result = selectByInStoreStatement.executeQuery();
+        boolean hasNext = result.next();
+        if (hasNext) {
+            inStoreList.add(getDomainBook(result));
+        }
+
         return inStoreList;
 
     }
-     
-     public void update(DomainBook book, ResultSet result) throws SQLException {
+
+    public void update(DomainBook book, Connection connect) throws SQLException {
         PreparedStatement updateBookStatement = connect.prepareStatement(updateBooksSQL);
-        if (null != selectByArticul(book.getArticul())) {
-            updateBookStatement.setInt(1, book.getQuantity());
-        }
+        updateBookStatement.setInt(1, book.getQuantity());
+        updateBookStatement.setInt(2, book.getId());
+        updateBookStatement.execute();
+
     }
-     
-     
-     public ResultSet getResult(String path, Object object) throws SQLException {
+
+    public ResultSet getResult(String path, Object object) throws SQLException {
+        connect = connection.getConnect();
         PreparedStatement getResultStatement = connect.prepareStatement(path);
-               
-        if(object instanceof String){
-           getResultStatement.setString(1,(String)object);           
-                    }
-        else if(object instanceof Integer){
-            getResultStatement.setInt(1,(Integer)object);            
+
+        if (object instanceof String) {
+            getResultStatement.setString(1, (String) object);
+        } else if (object instanceof Integer) {
+            getResultStatement.setInt(1, (Integer) object);
         }
         ResultSet result = getResultStatement.executeQuery();
-        
+
         return result;
 
     }
