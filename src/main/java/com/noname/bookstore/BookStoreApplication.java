@@ -55,7 +55,7 @@ public class BookStoreApplication {
         SaleMan man = new SaleMan(saleService, bookService, autorService);
         man.addBooks(path);
         System.out.println("Books insert successful");
-        List<DomainBook> booklistFromautor = man.selectBookByAutor("V.K. Petrov");
+        List<DomainBook> booklistFromautor = man.selectBookByAutor("V.K.Petrov");
         for (DomainBook b : booklistFromautor) {
             System.out.println(b.getName() + "\n");
         }

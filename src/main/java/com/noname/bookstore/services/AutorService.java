@@ -41,6 +41,9 @@ public class AutorService {
             + "inner join \"booklist\".autor as a on a.id = ab.autor_id "
             + "where b.id = ? "
             + "order by ab.book_id";
+    
+    String selectForAutors_of_book = "SELECT * FROM \"booklist\".autor_Of_books where book_id = ? and autor_id = ?";
+            
 
     public int getGenerator() throws SQLException {
         return generatorsService.getGeneratorID("autor");
@@ -51,7 +54,7 @@ public class AutorService {
         for (DomainBook b : booksForAdd) {
             List<DomainAutor> autors = b.getAutors();
             List<DomainAutor> result = new ArrayList<>(booksForAdd.size());
-            for (DomainAutor a : autors) {
+            for (DomainAutor a : autors) {                
                 if (null == selectAutor(a.getFullName())) {
                     a.setId(getGenerator());
                     insertAutor(a, connect);
@@ -61,9 +64,9 @@ public class AutorService {
                     result.add(a);
                 }
             }
-            b.setAutor(result);
+            b.setAutor(result);            
         }
-        return booksForAdd;
+        return booksForAdd;      
 
     }
 
@@ -72,9 +75,10 @@ public class AutorService {
         PreparedStatement addBookId = connect.prepareStatement(addToAutorsOfBookSQL);
         for (DomainBook b : books) {
             int bookId = b.getId();
-            if (null != selectFromBook(bookId)) {
-                List<DomainAutor> autors = b.getAutors();
+            List<DomainAutor> autors = b.getAutors();                            
                 for (DomainAutor a : autors) {
+                    int autorId = a.getId();
+                    if(!selectFromBookAndAutorId(bookId,autorId)){                    
                     addBookId.setInt(1, bookId);
                     addBookId.setInt(2, a.getId());
                     addBookId.execute();
@@ -82,6 +86,7 @@ public class AutorService {
             }
         }
     }
+    
 
     public void insertAutor(DomainAutor autor, Connection connect) throws SQLException {
         PreparedStatement addAutorStatment = connect.prepareStatement(addAutorSQL);
@@ -104,16 +109,17 @@ public class AutorService {
         return null;
     }
 
-    public List<DomainAutor> selectFromBook(int bookId) throws SQLException {
-        ResultSet result = getResult(selectAutorOfBooksSQL, bookId);
+    public boolean selectFromBookAndAutorId(int bookId, int autorId) throws SQLException {
+        PreparedStatement selectBookAndAutor = connect.prepareStatement(selectForAutors_of_book);
+        selectBookAndAutor.setInt(1, bookId);
+        selectBookAndAutor.setInt(2, autorId);
+        ResultSet result = selectBookAndAutor.executeQuery();
         List<DomainAutor> autorFromBook = new ArrayList<>();
         boolean hasNext = result.next();
         if (hasNext) {
-            autorFromBook.add(getAutor(result));
+            return hasNext;
         }
-
-        return autorFromBook;
-
+        return false;
     }
 
     public ResultSet getResult(String path, Object object) throws SQLException {

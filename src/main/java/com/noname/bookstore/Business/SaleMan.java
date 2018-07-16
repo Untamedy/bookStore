@@ -50,8 +50,8 @@ public class SaleMan {
         return bookService.selectByInStore();
     }
 
-    public List<DomainBook> selectBookByAutor(String lastname) throws SQLException {
-        return bookService.selectFromAutor(lastname);
+    public List<DomainBook> selectBookByAutor(String fullname) throws SQLException {
+        return bookService.selectFromAutor(fullname);
     }
 
     public List<DomainBook> selectBooksByName(String name) throws SQLException {

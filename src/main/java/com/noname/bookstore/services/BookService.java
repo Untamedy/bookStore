@@ -32,7 +32,7 @@ public class BookService {
     public final String selectByName = "SELECT id,name, genre, price,quantity,articul FROM \"booklist\".books where \"name\" = ?";
     public final String selectByInStore = "Select * from \"booklist\".books where quantity>0";
     public final String selectBookFromAutorSQL = "select b.* from \"booklist\".books b, \"booklist\".autor a, \"booklist\".autor_of_books ab "
-            + "where a.\"name\" =? "
+            + "where a.\"fullname\"=? "
             + "and a.id = ab.autor_id "
             + "and b.id = ab.book_id";
     public final String updateBooksSQL = "Update \"booklist\".books SET quantity = quantity +? where id = ?";
@@ -79,15 +79,15 @@ public class BookService {
 
     }
 
-    public List<DomainBook> selectFromAutor(String autorLastname) throws SQLException {
-        ResultSet result = getResult(selectBookFromAutorSQL, autorLastname);
+    public List<DomainBook> selectFromAutor(String autorfullname) throws SQLException {
+        ResultSet result = getResult(selectBookFromAutorSQL, autorfullname);
         List<DomainBook> bookFromAutor = new ArrayList<>();
         boolean hasNext = result.next();
         if (hasNext) {
             bookFromAutor.add(getDomainBook(result));
+            return bookFromAutor;
         }
-
-        return bookFromAutor;
+        return null;     
 
     }
 
