@@ -20,9 +20,9 @@ import java.util.List;
  */
 public class AutorService {
 
-    GeneratorsService generatorsService;
-    ServiceConnection connection;
-    Connection connect;
+    private GeneratorsService generatorsService;
+    private ServiceConnection connection;
+    private Connection connect;
 
     public AutorService(GeneratorsService generatorsService, ServiceConnection connection) {
         this.generatorsService = generatorsService;
@@ -31,19 +31,18 @@ public class AutorService {
         connect = connection.getConnect();
     }
 
-    String addAutorSQL = "INSERT INTO \"booklist\".autor(id,name,lastname,fullname) values(?,?,?,?)";
+    public final String addAutorSQL = "INSERT INTO \"booklist\".autor(id,name,lastname,fullname) values(?,?,?,?)";
     public final String addToAutorsOfBookSQL = "INSERT INTO \"booklist\".autor_of_books (book_id, autor_id) values(?,?)";
 
-    String selectAutorSQL = "SELECT id,name,lastname FROM \"booklist\".autor where \"fullname\" = ?";
-    String selectAutorOfBooksSQL = "SELECT a.* "
+    public final String selectAutorSQL = "SELECT id,name,lastname FROM \"booklist\".autor where \"fullname\" = ?";
+    public final String selectAutorOfBooksSQL = "SELECT a.* "
             + "FROM \"booklist\".autor_Of_books as ab "
             + "inner join \"booklist\".books as b on b.id = ab.book_id "
             + "inner join \"booklist\".autor as a on a.id = ab.autor_id "
             + "where b.id = ? "
             + "order by ab.book_id";
-    
-    String selectForAutors_of_book = "SELECT * FROM \"booklist\".autor_Of_books where book_id = ? and autor_id = ?";
-            
+
+    public final String selectForAutors_of_book = "SELECT * FROM \"booklist\".autor_Of_books where book_id = ? and autor_id = ?";
 
     public int getGenerator() throws SQLException {
         return generatorsService.getGeneratorID("autor");
@@ -54,7 +53,7 @@ public class AutorService {
         for (DomainBook b : booksForAdd) {
             List<DomainAutor> autors = b.getAutors();
             List<DomainAutor> result = new ArrayList<>(booksForAdd.size());
-            for (DomainAutor a : autors) {                
+            for (DomainAutor a : autors) {
                 if (null == selectAutor(a.getFullName())) {
                     a.setId(getGenerator());
                     insertAutor(a, connect);
@@ -64,9 +63,9 @@ public class AutorService {
                     result.add(a);
                 }
             }
-            b.setAutor(result);            
+            b.setAutor(result);
         }
-        return booksForAdd;      
+        return booksForAdd;
 
     }
 
@@ -75,10 +74,10 @@ public class AutorService {
         PreparedStatement addBookId = connect.prepareStatement(addToAutorsOfBookSQL);
         for (DomainBook b : books) {
             int bookId = b.getId();
-            List<DomainAutor> autors = b.getAutors();                            
-                for (DomainAutor a : autors) {
-                    int autorId = a.getId();
-                    if(!selectFromBookAndAutorId(bookId,autorId)){                    
+            List<DomainAutor> autors = b.getAutors();
+            for (DomainAutor a : autors) {
+                int autorId = a.getId();
+                if (!selectFromBookAndAutorId(bookId, autorId)) {
                     addBookId.setInt(1, bookId);
                     addBookId.setInt(2, a.getId());
                     addBookId.execute();
@@ -86,7 +85,6 @@ public class AutorService {
             }
         }
     }
-    
 
     public void insertAutor(DomainAutor autor, Connection connect) throws SQLException {
         PreparedStatement addAutorStatment = connect.prepareStatement(addAutorSQL);
@@ -138,6 +136,6 @@ public class AutorService {
     }
 
     public DomainAutor getAutor(ResultSet r) throws SQLException {
-        return new DomainAutor(r.getInt(1),r.getString(2), r.getString(3));
+        return new DomainAutor(r.getInt(1), r.getString(2), r.getString(3));
     }
 }

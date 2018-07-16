@@ -29,7 +29,7 @@ public class BookService {
     public final String addBooksSQL = "INSERT INTO \"booklist\".books (id,name, genre, price,quantity,articul) values(?,?,?,?,?,?)";
 
     public final String selectBooksSQL = "SELECT id,name, genre, price,quantity,articul FROM \"booklist\".books where \"articul\" = ?";
-    public final String selectByName = "SELECT id,name, genre, price,quantity,articul FROM \"booklist\".books where \"name\" = ?";
+    public final String selectByName = "SELECT * FROM \"booklist\".books where \"name\" = ?";
     public final String selectByInStore = "Select * from \"booklist\".books where quantity>0";
     public final String selectBookFromAutorSQL = "select b.* from \"booklist\".books b, \"booklist\".autor a, \"booklist\".autor_of_books ab "
             + "where a.\"fullname\"=? "
@@ -46,13 +46,11 @@ public class BookService {
     public int getID() throws SQLException {
         return generatorsService.getGeneratorID("book");
     }
-    
-   
 
     public List<DomainBook> addBooks(List<DomainBook> book) throws SQLException {
         Connection connect = connection.getConnect();
         List<DomainBook> result = new ArrayList<>(book.size());
-        for (DomainBook b : book) {            
+        for (DomainBook b : book) {
             if (null != selectByArticul(b.getArticul())) {
                 update(b, connect);
                 b.setId(selectByArticul(b.getArticul()).getId());
@@ -87,7 +85,7 @@ public class BookService {
             bookFromAutor.add(getDomainBook(result));
             return bookFromAutor;
         }
-        return null;     
+        return null;
 
     }
 
@@ -117,8 +115,9 @@ public class BookService {
         List<DomainBook> inStoreList = new ArrayList<>();
         ResultSet result = selectByInStoreStatement.executeQuery();
         boolean hasNext = result.next();
-        if (hasNext) {
+        while (hasNext) {
             inStoreList.add(getDomainBook(result));
+            hasNext = result.next();
         }
 
         return inStoreList;

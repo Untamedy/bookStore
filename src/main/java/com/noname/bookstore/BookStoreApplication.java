@@ -35,7 +35,10 @@ public class BookStoreApplication {
         GeneratorsService generatorsService = new GeneratorsService(connect);
         BookService bookService = new BookService(generatorsService, connect);
         AutorService autorService = new AutorService(generatorsService, connect);
-        SaleService saleService = new SaleService();
+        SaleService saleService = new SaleService(connect);
+        
+        String path = "D:/tmp/inputListOfBooks.txt";
+        
 
         System.out.println("Start creating dataBase connect");
         try {
@@ -48,17 +51,25 @@ public class BookStoreApplication {
             System.out.println("Connection wasn't creating ");
             logger.severe(e.getMessage());
 
-        }
-        String path = "D:/tmp/inputListOfBooks.txt";
+        }        
 
         System.out.println("Start insert books");
         SaleMan man = new SaleMan(saleService, bookService, autorService);
-        man.addBooks(path);
+        //man.addBooks(path);
         System.out.println("Books insert successful");
-        List<DomainBook> booklistFromautor = man.selectBookByAutor("V.K.Petrov");
+        List<DomainBook> booklistFromautor = man.selectBookByAutor("V.K. Petrov");
         for (DomainBook b : booklistFromautor) {
             System.out.println(b.getName() + "\n");
         }
+        List<DomainBook> bookByName = man.selectBooksByName("Fairy tales");
+        for (DomainBook b : bookByName) {
+            System.out.println(b.getId() + " " + b.getName()+ " " + b.getPrice() + " " + "\n");
+        }
+        List<DomainBook> inStore = man.selectbookByInStore();
+        for (DomainBook b : inStore) {
+            System.out.println(b.getId() + " " + b.getName()+ " " + b.getPrice() + " " + b.getQuantity() + "\n");
+        }
+        man.saleBooks();
 
     }
 }

@@ -5,7 +5,6 @@
  */
 package com.noname.bookstore.services;
 
-import com.noname.bookstore.domains.DomainAutor;
 import com.noname.bookstore.domains.DomainBook;
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,41 +20,49 @@ import java.util.List;
  */
 public class SaleService {
     
-    DocumentWriter writeCheck = new DocumentWriter();
-    ServiceConnection connection = new ServiceConnection();
-    Connection connect = connection.getConnect();
-    String path = "D:/tmp/inputListOfBooks.txt";
+    private DocumentWriter writeCheck = new DocumentWriter();
+    private ServiceConnection connection;
+    private Connection connect;
 
-    String updateAfterSaleSQL = "Update \"booklist\".books SET quantity = quantity -? where articul = ?";
+    public SaleService(ServiceConnection connection) {
+        this.connection = connection;
+        this.connect = connection.getConnect();
+    }
+    
+    
+    
+
+    private final String path = "D:/tmp/outputListOfBooks.txt";
+
+    private final String updateAfterSaleSQL = "Update \"booklist\".books SET quantity = quantity -? where articul = ?";
 
     List<DomainBook> saleList = new ArrayList<>();
 
-    public void sale() throws SQLException, IOException {
-        List<DomainBook> saleList = getListForSale();
-        connect=connection.getConnect();
+    public void sale()throws SQLException, IOException {
+        connect = connection.getConnect();        
+        List<DomainBook> saleList = getListForSale();        
         PreparedStatement saleStatement = connect.prepareStatement(updateAfterSaleSQL);
-        for(DomainBook db:saleList){
-            int articul = db.getArticul();
-            int bookQantity = db.getQuantity();
-        saleStatement.setInt(1, bookQantity);
-        saleStatement.setInt(2, articul);
-        ResultSet result = saleStatement.executeQuery();    
+        for (DomainBook db : saleList) {
+            saleStatement.setInt(1, db.getQuantity());
+            saleStatement.setInt(2, db.getArticul());
+            saleStatement.execute();
+            
         }
-        
+
         writeCheck.writeChecks(saleList);
 
     }
-    
-    public List<DomainBook> getListForSale(){
+
+    public List<DomainBook> getListForSale() {
         DocumentReader reader = new DocumentReader();
         List<DomainBook> saleList = new ArrayList<>();
         saleList = reader.readFile(path);
-        
-        return saleList;        
+
+        return saleList;
     }
 
     public ResultSet getResult(String path, Object object) throws SQLException {
-        connect = connection.getConnect();
+        Connection connect = connection.getConnect();
         PreparedStatement getResultStatement = connect.prepareStatement(path);
 
         if (object instanceof String) {

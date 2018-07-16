@@ -10,9 +10,10 @@ package com.noname.bookstore.domains;
  * @author YBolshakova
  */
 public class DomainAutor {
-    int id;
-    String name;
-    String lastName;
+
+    private int id;
+    private String name;
+    private String lastName;
 
     public void setName(String name) {
         this.name = name;
@@ -25,10 +26,9 @@ public class DomainAutor {
     public void setId(int id) {
         this.id = id;
     }
-  
-    
-    public DomainAutor(){    
-}
+
+    public DomainAutor() {
+    }
 
     public int getId() {
         return id;
@@ -42,23 +42,22 @@ public class DomainAutor {
         return lastName;
     }
 
-    
-    public DomainAutor(int id,String name, String lastName){
-        this();   
-        this.id=id;
-        this.name=name;
-        this.lastName=lastName;           
-            }
-    public DomainAutor(String name, String lastName){
-        this(); 
-        this.name=name;
-        this.lastName=lastName;           
-            }
-    
-    public String getFullName(){
+    public DomainAutor(int id, String name, String lastName) {
+        this();
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+    }
+
+    public DomainAutor(String name, String lastName) {
+        this();
+        this.name = name;
+        this.lastName = lastName;
+    }
+
+    public String getFullName() {
         String fullName = name + " " + lastName;
         return fullName;
     }
-    
-    
+
 }

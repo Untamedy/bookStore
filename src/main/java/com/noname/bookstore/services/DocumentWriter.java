@@ -18,23 +18,22 @@ import javafx.beans.binding.Bindings;
  *
  * @author YBolshakova
  */
-public class DocumentWriter {    
+public class DocumentWriter {
+
     String fileName = "Thank you for your purchase!";
     Date date = new Date();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
-    
-    
-    public void writeChecks(List<DomainBook> saleBookList) throws IOException{ 
-    DocumentReader read = new DocumentReader(); 
-    File check = new File("D:/tmp/cheks/check_" + dateFormat.format(date) + ".txt");
-    FileWriter writer = new FileWriter(check, true);    
-    writer.write(fileName + "/n****" );
-    for(DomainBook sale: saleBookList){        
-        writer.write(sale.toString());
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+
+    public void writeChecks(List<DomainBook> saleBookList) throws IOException {
+        DocumentReader read = new DocumentReader();
+        File check = new File("D:/tmp/cheks/check_" + dateFormat.format(date) + ".txt");
+        FileWriter writer = new FileWriter(check, true);
+        for (DomainBook sale : saleBookList) {
+            writer.write(sale.getBookinfo(sale));
+        }
+        writer.write(fileName + " ");
+        writer.flush();
+        writer.close();
     }
 
-    writer.flush();
-    writer.close();
-    }
-    
 }

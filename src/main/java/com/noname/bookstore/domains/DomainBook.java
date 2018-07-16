@@ -13,13 +13,13 @@ import java.util.List;
  */
 public class DomainBook {
 
-    int id;
-    String name;
-    List<DomainAutor> autor;
-    String genre;
-    double price;
-    int quantity;
-    int articul;
+    private int id;
+    private String name;
+    private List<DomainAutor> autor;
+    private String genre;
+    private double price;
+    private int quantity;
+    private int articul;
     
 
     public DomainBook() {
@@ -110,6 +110,11 @@ public class DomainBook {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+    
+    public String getBookinfo(DomainBook book){
+        String info = book.getArticul() + " " + book.getName()+ " " + book.getGenre()+ " " + book.getPrice() + " " ;
+        return info;
     }
 
 }

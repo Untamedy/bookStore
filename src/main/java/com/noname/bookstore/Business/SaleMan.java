@@ -21,9 +21,9 @@ import java.util.List;
  */
 public class SaleMan {
 
-    SaleService saleService;
-    BookService bookService;
-    AutorService autorService;  
+    private SaleService saleService;
+    private BookService bookService;
+    private AutorService autorService;  
     
     
     public SaleMan(SaleService saleService, BookService bookService, AutorService autorService) {
