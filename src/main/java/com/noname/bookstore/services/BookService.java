@@ -44,6 +44,7 @@ public class BookService {
     }
 
     public int getID() throws SQLException {
+        generatorsService = new GeneratorsService(connection);
         return generatorsService.getGeneratorID("book");
     }
 
@@ -85,7 +86,7 @@ public class BookService {
             bookFromAutor.add(getDomainBook(result));
             return bookFromAutor;
         }
-        return null;
+        return bookFromAutor;
 
     }
 
@@ -110,7 +111,7 @@ public class BookService {
 
     }
 
-    public List<DomainBook> selectByInStore() throws SQLException {
+    public List<DomainBook> selectByInStore() throws SQLException {        
         PreparedStatement selectByInStoreStatement = connect.prepareStatement(selectByInStore);
         List<DomainBook> inStoreList = new ArrayList<>();
         ResultSet result = selectByInStoreStatement.executeQuery();

@@ -10,6 +10,7 @@ import com.noname.bookstore.domains.DomainBook;
 import com.noname.bookstore.services.AutorService;
 import com.noname.bookstore.services.BookService;
 import com.noname.bookstore.services.DocumentReader;
+import com.noname.bookstore.services.GeneratorsService;
 import com.noname.bookstore.services.SaleService;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,24 +24,29 @@ public class SaleMan {
 
     private SaleService saleService;
     private BookService bookService;
-    private AutorService autorService;  
-    
-    
+    private AutorService autorService;
+    private GeneratorsService generatorsService;
+
     public SaleMan(SaleService saleService, BookService bookService, AutorService autorService) {
         this.saleService = saleService;
         this.bookService = bookService;
         this.autorService = autorService;
     }
 
+    public SaleMan(SaleService saleService, BookService bookService, AutorService autorService, GeneratorsService generatorsService) {
+        this.saleService = saleService;
+        this.bookService = bookService;
+        this.autorService = autorService;
+        this.generatorsService = generatorsService;
+    }
+
     public void addBooks(String path) throws SQLException {
         DocumentReader reader = new DocumentReader();
         List<DomainBook> booksForAdd = reader.readFile(path);
         booksForAdd = bookService.addBooks(booksForAdd);
-        booksForAdd = autorService.addAutors(booksForAdd);        
+        booksForAdd = autorService.addAutors(booksForAdd);
         autorService.insertToAutor_of_books(booksForAdd);
     }
-
-  
 
     public DomainBook selectbooksByArticul(int articul) throws SQLException {
         return bookService.selectByArticul(articul);

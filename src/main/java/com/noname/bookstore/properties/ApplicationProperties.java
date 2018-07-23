@@ -18,11 +18,12 @@ import java.util.logging.Logger;
 public class ApplicationProperties {
 
     public Properties properties = new Properties();
+    
 
-    public void readProperties() throws FileNotFoundException, IOException {
+    public void readProperties(String path) throws FileNotFoundException, IOException {
         Logger logger = Logger.getLogger(ApplicationProperties.class.getName());
         try {
-            FileReader reader = new FileReader("D:/tmp/conectPropBooks.properties");
+            FileReader reader = new FileReader(path);
             properties.load(reader);
 
         } catch (FileNotFoundException e) {

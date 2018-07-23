@@ -16,9 +16,10 @@ import java.sql.Statement;
  * @author YBolshakova
  */
 public class GeneratorsService {
+
     ServiceConnection connect;
     Connection connection;
-    
+
     public GeneratorsService(ServiceConnection connect) {
         this.connect = connect;
         this.connection = connection;
@@ -27,13 +28,8 @@ public class GeneratorsService {
 
     String selectBookIDSQL = "SELECT gen_id FROM \"booklist\".generators where gen_name=?";
     String updateBookIDSQL = "UPDATE \"booklist\".generators SET gen_id = gen_id+1 where gen_name =?;";
-    
 
-    
-  
-    
     String columName;
-   
 
     public int getGeneratorID(String name) throws SQLException {
         columName = name + "_id";
@@ -47,15 +43,13 @@ public class GeneratorsService {
         }
         return 0;
     }
-    
 
     public void updateGeneratorID(String name) throws SQLException {
         columName = name + "_id";
         PreparedStatement generatorsUpBook = connection.prepareStatement(updateBookIDSQL);
         generatorsUpBook.setString(1, columName);
         generatorsUpBook.execute();
-        
+
     }
 
-   
 }

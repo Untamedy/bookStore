@@ -10,13 +10,12 @@ import com.noname.bookstore.domains.DomainBook;
 import com.noname.bookstore.properties.ApplicationProperties;
 import com.noname.bookstore.services.AutorService;
 import com.noname.bookstore.services.BookService;
-import com.noname.bookstore.services.DocumentReader;
-import com.noname.bookstore.services.DocumentWriter;
+
 import com.noname.bookstore.services.GeneratorsService;
 import com.noname.bookstore.services.SaleService;
 import com.noname.bookstore.services.ServiceConnection;
 import java.io.IOException;
-import java.io.Writer;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +35,14 @@ public class BookStoreApplication {
         BookService bookService = new BookService(generatorsService, connect);
         AutorService autorService = new AutorService(generatorsService, connect);
         SaleService saleService = new SaleService(connect);
-        
-        String path = "D:/tmp/inputListOfBooks.txt";
-        
 
+        String path = "D:/tmp/inputListOfBooks.txt";
+
+        String pathProp = "D:/tmp/conectPropBooks.properties";
         System.out.println("Start creating dataBase connect");
         try {
             ApplicationProperties prop = new ApplicationProperties();
-            prop.readProperties();
+            prop.readProperties(pathProp);
             connect.setProperties(prop);
             connect.getConnect();
             System.out.println("Connect successful");
@@ -51,11 +50,11 @@ public class BookStoreApplication {
             System.out.println("Connection wasn't creating ");
             logger.severe(e.getMessage());
 
-        }        
+        }
 
         System.out.println("Start insert books");
         SaleMan man = new SaleMan(saleService, bookService, autorService);
-        //man.addBooks(path);
+        man.addBooks(path);
         System.out.println("Books insert successful");
         List<DomainBook> booklistFromautor = man.selectBookByAutor("V.K. Petrov");
         for (DomainBook b : booklistFromautor) {
@@ -63,11 +62,11 @@ public class BookStoreApplication {
         }
         List<DomainBook> bookByName = man.selectBooksByName("Fairy tales");
         for (DomainBook b : bookByName) {
-            System.out.println(b.getId() + " " + b.getName()+ " " + b.getPrice() + " " + "\n");
+            System.out.println(b.getId() + " " + b.getName() + " " + b.getPrice() + " " + "\n");
         }
         List<DomainBook> inStore = man.selectbookByInStore();
         for (DomainBook b : inStore) {
-            System.out.println(b.getId() + " " + b.getName()+ " " + b.getPrice() + " " + b.getQuantity() + "\n");
+            System.out.println(b.getId() + " " + b.getName() + " " + b.getPrice() + " " + b.getQuantity() + "\n");
         }
         man.saleBooks();
 

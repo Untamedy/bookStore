@@ -45,6 +45,7 @@ public class AutorService {
     public final String selectForAutors_of_book = "SELECT * FROM \"booklist\".autor_Of_books where book_id = ? and autor_id = ?";
 
     public int getGenerator() throws SQLException {
+        generatorsService = new GeneratorsService(connection);
         return generatorsService.getGeneratorID("autor");
     }
 
