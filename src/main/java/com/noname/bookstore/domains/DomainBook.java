@@ -20,7 +20,6 @@ public class DomainBook {
     private double price;
     private int quantity;
     private int articul;
-    
 
     public DomainBook() {
 
@@ -87,7 +86,7 @@ public class DomainBook {
     public void setName(String name) {
         this.name = name;
     }
-   
+
     public String getGenre() {
         return genre;
     }
@@ -111,10 +110,15 @@ public class DomainBook {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
-    public String getBookinfo(DomainBook book){
-        String info = book.getArticul() + " " + book.getName()+ " " + book.getGenre()+ " " + book.getPrice() + " " ;
+
+    public String getBookinfo(DomainBook book) {
+        String info = book.getArticul() + " " + book.getName() + " " + book.getGenre() + " " + book.getPrice() + " ";
         return info;
+    }
+
+    @Override
+    public String toString() {
+        return "DomainBook{" + "id=" + id + ", name=" + name + ", genre=" + genre + ", price=" + price + ", quantity=" + quantity + ", articul=" + articul + '}';
     }
 
 }

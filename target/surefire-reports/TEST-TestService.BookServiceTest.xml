@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="8" failures="0" name="TestService.BookServiceTest" time="5.839" errors="0" skipped="0">
+<testsuite tests="8" failures="0" name="TestService.BookServiceTest" time="7.487" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_151\jre\bin"/>
@@ -61,12 +61,12 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="TestService.BookServiceTest" name="selectByInStore" time="0.016"/>
-  <testcase classname="TestService.BookServiceTest" name="selectByAutorTest" time="0.012"/>
+  <testcase classname="TestService.BookServiceTest" name="selectByInStore" time="0.033"/>
+  <testcase classname="TestService.BookServiceTest" name="selectByAutorTest" time="0.013"/>
   <testcase classname="TestService.BookServiceTest" name="selectByArticul" time="0.015"/>
-  <testcase classname="TestService.BookServiceTest" name="addAutorsToDB" time="0.018"/>
-  <testcase classname="TestService.BookServiceTest" name="selectByName" time="0.015"/>
-  <testcase classname="TestService.BookServiceTest" name="addBooksToDB" time="0.131"/>
-  <testcase classname="TestService.BookServiceTest" name="saleBook" time="0.023"/>
-  <testcase classname="TestService.BookServiceTest" name="readFileTest" time="0.127"/>
+  <testcase classname="TestService.BookServiceTest" name="addAutorsToDB" time="0.019"/>
+  <testcase classname="TestService.BookServiceTest" name="selectByName" time="0.014"/>
+  <testcase classname="TestService.BookServiceTest" name="addBooksToDB" time="0.02"/>
+  <testcase classname="TestService.BookServiceTest" name="saleBook" time="0.021"/>
+  <testcase classname="TestService.BookServiceTest" name="readFileTest" time="0.015"/>
 </testsuite>

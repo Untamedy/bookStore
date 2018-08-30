@@ -7,6 +7,9 @@ package com.noname.bookstore;
 
 import com.noname.bookstore.Business.SaleMan;
 import com.noname.bookstore.domains.DomainBook;
+import com.noname.bookstore.httpServer.AutorNameHandler;
+import com.noname.bookstore.httpServer.BookHandler;
+import com.noname.bookstore.httpServer.InfoHandler;
 import com.noname.bookstore.properties.ApplicationProperties;
 import com.noname.bookstore.services.AutorService;
 import com.noname.bookstore.services.BookService;
@@ -14,7 +17,9 @@ import com.noname.bookstore.services.BookService;
 import com.noname.bookstore.services.GeneratorsService;
 import com.noname.bookstore.services.SaleService;
 import com.noname.bookstore.services.ServiceConnection;
+import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,6 +33,9 @@ import java.util.logging.Logger;
 public class BookStoreApplication {
 
     public static void main(String[] args) throws IOException, SQLException {
+        String path = "D:/tmp/inputListOfBooks.txt";
+        String pathProp = "D:/tmp/conectPropBooks.properties";
+        
         Logger logger = Logger.getLogger(BookStoreApplication.class.getName());
         ServiceConnection connect = new ServiceConnection();
         List<DomainBook> saleBookList = new ArrayList<>();
@@ -35,11 +43,9 @@ public class BookStoreApplication {
         BookService bookService = new BookService(generatorsService, connect);
         AutorService autorService = new AutorService(generatorsService, connect);
         SaleService saleService = new SaleService(connect);
-
-        String path = "D:/tmp/inputListOfBooks.txt";
-
-        String pathProp = "D:/tmp/conectPropBooks.properties";
-        System.out.println("Start creating dataBase connect");
+        
+                
+               
         try {
             ApplicationProperties prop = new ApplicationProperties();
             prop.readProperties(pathProp);
@@ -50,25 +56,15 @@ public class BookStoreApplication {
             System.out.println("Connection wasn't creating ");
             logger.severe(e.getMessage());
 
-        }
-
-        System.out.println("Start insert books");
-        SaleMan man = new SaleMan(saleService, bookService, autorService);
-        man.addBooks(path);
-        System.out.println("Books insert successful");
-        List<DomainBook> booklistFromautor = man.selectBookByAutor("V.K. Petrov");
-        for (DomainBook b : booklistFromautor) {
-            System.out.println(b.getName() + "\n");
-        }
-        List<DomainBook> bookByName = man.selectBooksByName("Fairy tales");
-        for (DomainBook b : bookByName) {
-            System.out.println(b.getId() + " " + b.getName() + " " + b.getPrice() + " " + "\n");
-        }
-        List<DomainBook> inStore = man.selectbookByInStore();
-        for (DomainBook b : inStore) {
-            System.out.println(b.getId() + " " + b.getName() + " " + b.getPrice() + " " + b.getQuantity() + "\n");
-        }
-        man.saleBooks();
+        }       
+       
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        server.createContext("/book", new BookHandler(bookService));
+        server.createContext("/info", new InfoHandler());
+        server.createContext("/K.B. Kusin", new AutorNameHandler(bookService));
+        server.setExecutor(null);
+        server.start();
+        System.out.println("Server is listening on port 8080");
 
     }
 }

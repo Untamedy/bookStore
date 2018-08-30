@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: TestService.BookServiceTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.828 sec
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.483 sec
